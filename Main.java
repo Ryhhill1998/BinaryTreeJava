@@ -24,7 +24,7 @@ public class Main {
         binaryTree.traversePostOrderRecursive();
         System.out.println();
 
-        binaryTree.removeNode(2);
+        binaryTree.removeNode(6);
         binaryTree.traverseInOrderRecursive();
         binaryTree.traversePostOrderRecursive();
     }

@@ -58,13 +58,13 @@ public class BinaryTree {
         return found;
     }
 
-    private Node findPreviousNode(int value) {
+    private Node[] findNodeAndPrevious(int value) {
         Node currentNode = root;
         Node previousNode = null;
 
         while (currentNode != null) {
             if (currentNode.getValue() == value) {
-                return previousNode;
+                return new Node[]{currentNode, previousNode};
             } else if (currentNode.getValue() < value) {
                 previousNode = currentNode;
                 currentNode = currentNode.getRight();
@@ -74,7 +74,7 @@ public class BinaryTree {
             }
         }
 
-        return null;
+        return new Node[]{null, null};
     }
 
     private Node findSuccessor(Node nodeToRemove) {
@@ -102,16 +102,9 @@ public class BinaryTree {
             return;
         }
 
-        Node previousNode = findPreviousNode(value);
-        Node nodeToRemove;
-
-        if (previousNode == null) {
-            nodeToRemove = root;
-        } else if (previousNode.getLeft().getValue() == value) {
-            nodeToRemove = previousNode.getLeft();
-        } else {
-            nodeToRemove = previousNode.getRight();
-        }
+        Node[] nodeAndPrevious = findNodeAndPrevious(value);
+        Node nodeToRemove = nodeAndPrevious[0];
+        Node previousNode = nodeAndPrevious[1];
 
         Node successor = findSuccessor(nodeToRemove);
 
