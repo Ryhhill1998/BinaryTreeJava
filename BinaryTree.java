@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Stack;
 
 public class BinaryTree {
@@ -9,6 +11,7 @@ public class BinaryTree {
 
         if (root == null) {
             root = nodeToAdd;
+            return true;
         }
 
         Node currentNode = root;
@@ -37,6 +40,76 @@ public class BinaryTree {
         return added;
     }
 
+    public boolean nodeExists(int value) {
+        Node currentNode = root;
+        boolean found = false;
+
+        while (currentNode != null) {
+            if (currentNode.getValue() == value) {
+                found = true;
+                break;
+            } else if (currentNode.getValue() < value) {
+                currentNode = currentNode.getRight();
+            } else {
+                currentNode = currentNode.getLeft();
+            }
+        }
+
+        return found;
+    }
+
+    public boolean removeNode(int value) {
+        boolean removed = false;
+        Node currentNode = root;
+        Node previousNode = null;
+
+        while (currentNode != null && !removed) {
+            if (currentNode.getValue() == value) {
+                Node successor = findSuccessor(currentNode);
+                if (previousNode.getValue() > currentNode.getValue()) {
+                    previousNode.setLeft(successor);
+                } else {
+                    previousNode.setRight(successor);
+                }
+                removed = true;
+            } else if (currentNode.getValue() < value) {
+                previousNode = currentNode;
+                currentNode = currentNode.getRight();
+            } else {
+                previousNode = currentNode;
+                currentNode = currentNode.getLeft();
+            }
+        }
+
+        return removed;
+    }
+
+    private Node findSuccessor(Node nodeToRemove) {
+        Node successor = nodeToRemove.getLeft();
+        Node previous = nodeToRemove;
+        boolean foundSuccessor = false;
+
+        while (!foundSuccessor) {
+            if (successor.getRight() == null) {
+                foundSuccessor = true;
+            } else {
+                previous = successor;
+                successor = successor.getRight();
+            }
+        }
+
+        if (previous.getLeft() == successor) {
+            previous.setLeft(null);
+        } else {
+            previous.setRight(null);
+        }
+
+        nodeToRemove.setLeft(null);
+        nodeToRemove.setRight(null);
+
+        return successor;
+    }
+
     public void printTree() {
         Stack<Node> nodesToExpand = new Stack<>();
         nodesToExpand.push(root);
@@ -53,6 +126,37 @@ public class BinaryTree {
             if (currentNode.getLeft() != null) {
                 nodesToExpand.push(currentNode.getLeft());
             }
+        }
+    }
+
+    public void traverseInOrder() {
+        Stack<Node> nodesToExpand = new Stack<>();
+        nodesToExpand.push(root);
+        HashSet<Node> visitedNodes = new HashSet<>();
+
+        ArrayList<Integer> inorderNodeValues = new ArrayList<>();
+
+        while(!nodesToExpand.empty()) {
+            Node currentNode = nodesToExpand.pop();
+
+            if (currentNode == null) {
+                continue;
+            }
+
+            if (visitedNodes.contains(currentNode)) {
+                inorderNodeValues.add(currentNode.getValue());
+                continue;
+            }
+
+            nodesToExpand.push(currentNode.getRight());
+            nodesToExpand.push(currentNode);
+            nodesToExpand.push(currentNode.getLeft());
+
+            visitedNodes.add(currentNode);
+        }
+
+        for (int value : inorderNodeValues) {
+            System.out.print(value + " --> ");
         }
     }
 }

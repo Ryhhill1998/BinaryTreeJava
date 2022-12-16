@@ -11,6 +11,9 @@ public class Main {
         binaryTree.addNode(5);
         binaryTree.addNode(7);
 
-        binaryTree.printTree();
+        binaryTree.traverseInOrder();
+
+        System.out.println();
+        System.out.println(binaryTree.nodeExists(8));
     }
 }
