@@ -12,10 +12,7 @@ public class Main {
         binaryTree.addNode(7);
 
         binaryTree.traverseInOrder();
-        System.out.println();
         binaryTree.traverseInOrderRecursive();
-
-        System.out.println();
-        System.out.println(binaryTree.nodeExists(8));
+        binaryTree.traversePreOrder();
     }
 }

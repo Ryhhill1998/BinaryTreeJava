@@ -158,6 +158,7 @@ public class BinaryTree {
         for (int value : inorderNodeValues) {
             System.out.print(value + " --> ");
         }
+        System.out.println();
     }
 
     public void traverseInOrderRecursive() {
@@ -166,6 +167,7 @@ public class BinaryTree {
         for (int value : inorderValues) {
             System.out.print(value + " --> ");
         }
+        System.out.println();
     }
 
     private void traverseInOrderRecursive(Node currentNode, ArrayList<Integer> inorderValues) {
@@ -178,5 +180,29 @@ public class BinaryTree {
         inorderValues.add(currentNode.getValue());
 
         traverseInOrderRecursive(currentNode.getRight(), inorderValues);
+    }
+
+    public void traversePreOrder() {
+        Stack<Node> nodesToExpand = new Stack<>();
+        nodesToExpand.push(root);
+
+        ArrayList<Integer> preOrderValues = new ArrayList<>();
+
+        while (!nodesToExpand.empty()) {
+            Node currentNode = nodesToExpand.pop();
+            if (currentNode == null) {
+                continue;
+            }
+
+            preOrderValues.add(currentNode.getValue());
+            nodesToExpand.push(currentNode.getRight());
+            nodesToExpand.push(currentNode.getLeft());
+        }
+
+        for (int value : preOrderValues) {
+            System.out.print(value + " --> ");
+        }
+
+        System.out.println();
     }
 }
