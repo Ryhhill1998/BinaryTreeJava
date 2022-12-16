@@ -228,6 +228,36 @@ public class BinaryTree {
     }
 
     public void traversePostOrder() {
-        
+        Stack<Node> nodesToExpand = new Stack<>();
+        nodesToExpand.push(root);
+        HashSet<Node> visitedNodes = new HashSet<>();
+
+        ArrayList<Integer> nodeValues = new ArrayList<>();
+
+        while (!nodesToExpand.empty()) {
+            Node currentNode = nodesToExpand.peek();
+
+            if (currentNode == null) {
+                nodesToExpand.pop();
+                continue;
+            }
+
+            if (visitedNodes.contains(currentNode)) {
+                nodeValues.add(currentNode.getValue());
+                nodesToExpand.pop();
+                continue;
+            }
+
+            nodesToExpand.push(currentNode.getRight());
+            nodesToExpand.push(currentNode.getLeft());
+
+            visitedNodes.add(currentNode);
+        }
+
+        for (int value : nodeValues) {
+            System.out.print(value + " --> ");
+        }
+
+        System.out.println();
     }
 }
