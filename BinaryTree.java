@@ -77,12 +77,28 @@ public class BinaryTree {
         return new Node[]{null, null};
     }
 
-    private Node findSuccessor(Node nodeToRemove) {
-        Node successor = nodeToRemove.getLeft();
-        Node previous = nodeToRemove;
-        boolean goingLeft = true;
+    public void removeNode(int value) {
+        if (!nodeExists(value)) {
+            return;
+        }
 
-        while (successor != null && successor.getRight() != null) {
+        Node[] nodeAndPrevious = findNodeAndPrevious(value);
+        Node nodeToRemove = nodeAndPrevious[0];
+        Node previousNode = nodeAndPrevious[1];
+        replaceNode(nodeToRemove, previousNode);
+    }
+
+    private Node findSuccessor(Node nodeToRemove) {
+        boolean goingLeft = true;
+        Node successor = nodeToRemove.getLeft();
+
+        if (successor == null) {
+            return null;
+        }
+
+        Node previous = nodeToRemove;
+
+        while (successor.getRight() != null) {
             previous = successor;
             successor = successor.getRight();
             goingLeft = false;
@@ -97,22 +113,12 @@ public class BinaryTree {
         return successor;
     }
 
-    public void removeNode(int value) {
-        if (!nodeExists(value)) {
-            return;
-        }
+    private void replaceNode(Node nodeToReplace, Node previousNode) {
+        Node successor = findSuccessor(nodeToReplace);
 
-        Node[] nodeAndPrevious = findNodeAndPrevious(value);
-        Node nodeToRemove = nodeAndPrevious[0];
-        Node previousNode = nodeAndPrevious[1];
-
-        Node successor = findSuccessor(nodeToRemove);
-
-        replaceNode(nodeToRemove, successor, previousNode);
-    }
-
-    private void replaceNode(Node nodeToReplace, Node successor, Node nodeBeforeSuccessor) {
-        if (successor != null) {
+        if (successor == null) {
+            successor = nodeToReplace.getRight();
+        } else {
             successor.setLeft(nodeToReplace.getLeft());
             successor.setRight(nodeToReplace.getRight());
         }
@@ -120,15 +126,15 @@ public class BinaryTree {
         nodeToReplace.setLeft(null);
         nodeToReplace.setRight(null);
 
-        if (nodeBeforeSuccessor == null) {
+        if (previousNode == null) {
             root = successor;
             return;
         }
 
-        if (nodeBeforeSuccessor.getValue() < nodeToReplace.getValue()) {
-            nodeBeforeSuccessor.setRight(successor);
+        if (previousNode.getValue() < nodeToReplace.getValue()) {
+            previousNode.setRight(successor);
         } else {
-            nodeBeforeSuccessor.setLeft(successor);
+            previousNode.setLeft(successor);
         }
     }
 
