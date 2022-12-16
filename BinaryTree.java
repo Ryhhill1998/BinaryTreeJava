@@ -110,25 +110,6 @@ public class BinaryTree {
         return successor;
     }
 
-    public void printTree() {
-        Stack<Node> nodesToExpand = new Stack<>();
-        nodesToExpand.push(root);
-
-        while (!nodesToExpand.empty()) {
-            Node currentNode = nodesToExpand.pop();
-
-            System.out.print(currentNode.getValue() + " --> ");
-
-            if (currentNode.getRight() != null) {
-                nodesToExpand.push(currentNode.getRight());
-            }
-
-            if (currentNode.getLeft() != null) {
-                nodesToExpand.push(currentNode.getLeft());
-            }
-        }
-    }
-
     public void traverseInOrder() {
         Stack<Node> nodesToExpand = new Stack<>();
         nodesToExpand.push(root);
@@ -259,5 +240,26 @@ public class BinaryTree {
         }
 
         System.out.println();
+    }
+
+    public void traversePostOrderRecursive() {
+        ArrayList<Integer> nodeValues = new ArrayList<>();
+        traversePostOrderRecursive(root, nodeValues);
+        for (int value : nodeValues) {
+            System.out.print(value + " --> ");
+        }
+        System.out.println();
+    }
+
+    private void traversePostOrderRecursive(Node currentNode, ArrayList<Integer> nodeValues) {
+        if (currentNode == null) {
+            return;
+        }
+
+        traversePostOrderRecursive(currentNode.getLeft(), nodeValues);
+
+        traversePostOrderRecursive(currentNode.getRight(), nodeValues);
+
+        nodeValues.add(currentNode.getValue());
     }
 }

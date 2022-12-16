@@ -20,5 +20,7 @@ public class Main {
         System.out.println();
 
         binaryTree.traversePostOrder();
+        binaryTree.traversePostOrderRecursive();
+        System.out.println();
     }
 }
