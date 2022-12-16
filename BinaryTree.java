@@ -205,4 +205,29 @@ public class BinaryTree {
 
         System.out.println();
     }
+
+    public void traversePreOrderRecursive() {
+        ArrayList<Integer> nodeValues = new ArrayList<>();
+        traversePreOrderRecursive(root, nodeValues);
+        for (int value : nodeValues) {
+            System.out.print(value + " --> ");
+        }
+        System.out.println();
+    }
+
+    private void traversePreOrderRecursive(Node currentNode, ArrayList<Integer> nodeValues) {
+        if (currentNode == null) {
+            return;
+        }
+
+        nodeValues.add(currentNode.getValue());
+
+        traversePreOrderRecursive(currentNode.getLeft(), nodeValues);
+
+        traversePreOrderRecursive(currentNode.getRight(), nodeValues);
+    }
+
+    public void traversePostOrder() {
+        
+    }
 }

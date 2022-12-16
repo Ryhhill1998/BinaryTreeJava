@@ -13,6 +13,9 @@ public class Main {
 
         binaryTree.traverseInOrder();
         binaryTree.traverseInOrderRecursive();
+        System.out.println();
+
         binaryTree.traversePreOrder();
+        binaryTree.traversePreOrderRecursive();
     }
 }
