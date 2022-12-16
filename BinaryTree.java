@@ -58,20 +58,13 @@ public class BinaryTree {
         return found;
     }
 
-    public boolean removeNode(int value) {
-        boolean removed = false;
+    private Node findPreviousNode(int value) {
         Node currentNode = root;
         Node previousNode = null;
 
-        while (currentNode != null && !removed) {
+        while (currentNode != null) {
             if (currentNode.getValue() == value) {
-                Node successor = findSuccessor(currentNode);
-                if (previousNode.getValue() > currentNode.getValue()) {
-                    previousNode.setLeft(successor);
-                } else {
-                    previousNode.setRight(successor);
-                }
-                removed = true;
+                return previousNode;
             } else if (currentNode.getValue() < value) {
                 previousNode = currentNode;
                 currentNode = currentNode.getRight();
@@ -81,33 +74,69 @@ public class BinaryTree {
             }
         }
 
-        return removed;
+        return null;
     }
 
     private Node findSuccessor(Node nodeToRemove) {
         Node successor = nodeToRemove.getLeft();
         Node previous = nodeToRemove;
-        boolean foundSuccessor = false;
+        boolean goingLeft = true;
 
-        while (!foundSuccessor) {
-            if (successor.getRight() == null) {
-                foundSuccessor = true;
-            } else {
-                previous = successor;
-                successor = successor.getRight();
-            }
+        while (successor != null && successor.getRight() != null) {
+            previous = successor;
+            successor = successor.getRight();
+            goingLeft = false;
         }
 
-        if (previous.getLeft() == successor) {
+        if (goingLeft) {
             previous.setLeft(null);
         } else {
             previous.setRight(null);
         }
 
-        nodeToRemove.setLeft(null);
-        nodeToRemove.setRight(null);
-
         return successor;
+    }
+
+    public void removeNode(int value) {
+        if (!nodeExists(value)) {
+            return;
+        }
+
+        Node previousNode = findPreviousNode(value);
+        Node nodeToRemove;
+
+        if (previousNode == null) {
+            nodeToRemove = root;
+        } else if (previousNode.getLeft().getValue() == value) {
+            nodeToRemove = previousNode.getLeft();
+        } else {
+            nodeToRemove = previousNode.getRight();
+        }
+
+        Node successor = findSuccessor(nodeToRemove);
+
+        replaceNode(nodeToRemove, successor, previousNode);
+    }
+
+    private void replaceNode(Node nodeToReplace, Node successor, Node nodeBeforeSuccessor) {
+        if (successor != null) {
+            successor.setLeft(nodeToReplace.getLeft());
+            successor.setRight(nodeToReplace.getRight());
+        }
+
+        nodeToReplace.setLeft(null);
+        nodeToReplace.setRight(null);
+
+        if (nodeBeforeSuccessor == null) {
+            root = successor;
+            return;
+        }
+
+        if (nodeBeforeSuccessor.getValue() < nodeToReplace.getValue()) {
+            nodeBeforeSuccessor.setRight(successor);
+        } else {
+            nodeBeforeSuccessor.setLeft(successor);
+        }
     }
 
     public void traverseInOrder() {
